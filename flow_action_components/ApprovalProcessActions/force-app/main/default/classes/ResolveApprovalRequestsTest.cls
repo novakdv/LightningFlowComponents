@@ -14,12 +14,17 @@ public with sharing class ResolveApprovalRequestsTest {
 
         // Find New Process Instance
         ProcessInstance pi = [SELECT Id FROM ProcessInstance WHERE ProcessDefinitionId = :pd.Id LIMIT 1];
+        
+        //Find New WorkItemID
+        
+       	ProcessInstanceWorkitem pwi = [SELECT Id FROM ProcessInstanceWorkitem WHERE ProcessInstanceId = :pi.Id];
 
         // Create Request Object
         List<ResolveApprovalRequest.Requests> requests = new List<ResolveApprovalRequest.Requests>();
         ResolveApprovalRequest.Requests req = new ResolveApprovalRequest.Requests();
         req.action = 'Approve';
         req.comments = 'Test Comments';
+        req.approvalRequestId = pwi.Id;
         req.recordId = a.Id;
         req.objName = 'Account';
         req.nextApproverIds = new List<String>{userId};
